@@ -1,0 +1,47 @@
+version: '2'
+services:
+  interlock:
+    image: ehazlett/interlock:0.3.3
+    container_name: interlock
+    ports:
+      - "80:80"
+    volumes:
+      - /etc/docker:/etc/docker
+    command: "--swarm-url tcp://172.17.10.101:443 --swarm-tls-ca-cert /etc/docker/ca.pem --swarm-tls-cert /etc/docker/cert.pem --swarm-tls-key /etc/docker/key.pem --plugin haproxy start"
+    network_mode: swarm-private   
+    environment:
+      - "constraint:node==ucp-03"
+
+  logstash:  
+    image: scottyc/logstash
+    container_name: logstash
+    network_mode: swarm-private
+    ports:
+      - "9998:9998"
+      - "9999:9999/udp"
+      - "5000:5000"
+      - "5000:5000/udp"
+    environment:
+       ES_HOST: "elasticsearch"
+       ES_PORT: "9200"
+    command: logstash -f /opt/logstash/conf.d/logstash.conf
+
+  elasticsearch:  
+    image: elasticsearch:2.1.0
+    container_name: elasticsearch
+    network_mode: swarm-private
+    volumes:
+      - /etc/elk/esdata:/usr/share/elasticsearch/data
+    command: elasticsearch -Des.network.host=0.0.0.0 
+    privileged: true     
+
+  kibana:  
+    image: kibana:4.3.0
+    container_name: kibana
+    network_mode: swarm-private
+    ports:
+      - "5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - INTERLOCK_DATA={"hostname":"elk","domain":"ucp-demo.local"}
+      - "constraint:node==ucp-02"
