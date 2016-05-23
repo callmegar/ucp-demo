@@ -28,13 +28,13 @@ class ucpconfig::config (
     require => File['/etc/docker/get_ca.sh'],
     } ->
 
-  file { '/etc/profile.d/docker.sh':
+    file { '/etc/profile.d/docker.sh':
     ensure  => present,
     content => template('ucpconfig/docker.sh.erb'),
     mode    => '0644',
     } ->
 
-  docker_network { $docker_network:
+    docker_network { $docker_network:
     ensure  => present,
     driver  => $docker_network_driver,
     require => File['/etc/profile.d/docker.sh'],

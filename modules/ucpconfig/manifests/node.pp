@@ -19,8 +19,6 @@ class { 'docker_ucp':
   subject_alternative_names => $ucp_subject_alternative_names,
   replica                   => true,
   version                   => $ucp_version,
-  usage                     => false,
-  tracking                  => false,
   require                   => Class['docker']
   }
 }

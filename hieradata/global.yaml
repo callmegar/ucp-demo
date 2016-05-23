@@ -4,12 +4,12 @@ ucpconfig::ucp_deploy_node: ucp-03
 ucpconfig::ucp_url: https://172.17.10.101
 ucpconfig::ucp_username: admin        
 ucpconfig::ucp_password: orca 
-ucpconfig::ucp_version: 1.0.3
+ucpconfig::ucp_version: 1.1.0
 ucpconfig::ucp_host_address: "%{::ipaddress_eth1}"             
 ucpconfig::ucp_subject_alternative_names: "%{::ipaddress_eth0}" 
 ucpconfig::ucp_external_ca: false              
 ucpconfig::ucp_swarm_scheduler: spread          
-ucpconfig::ucp_swarm_port: 19001              
+ucpconfig::ucp_swarm_port: 2375              
 ucpconfig::ucp_controller_port: 443          
 ucpconfig::ucp_preserve_certs: true           
 ucpconfig::ucp_license_file: /etc/docker/subscription.lic             
